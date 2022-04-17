@@ -4,11 +4,20 @@ import api from "./api";
 
 function App() {
     const [users, setUsers] = useState([]);
-    console.log(users);
     useEffect(() => {
+        function loadData() {
+            return new Promise((resolve) => {
+                setTimeout(resolve, 2000);
+            });
+        }
+        loadData()
+            .then(() => {
+                const preloaderEl = document.getElementById("preloader");
+                preloaderEl.classList.add("hidden");
+                preloaderEl.classList.remove("visible");
+            });
         api.users.fetchAll().then((data) => setUsers(data));
     }, []);
-    console.log(users);
     const handleDelete = (userId) => {
         setUsers(users.filter((user) => user._id !== userId));
     };

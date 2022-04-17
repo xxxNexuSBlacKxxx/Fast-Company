@@ -29,10 +29,11 @@ const Users = ({ users, ...rest }) => {
     };
 
     const filteredUsers = selectedProf
-        ? users.filter((user) => user.profession === selectedProf)
+        ? users.filter((user) => {
+            return JSON.stringify(user.profession) === JSON.stringify(selectedProf);
+        })
         : users;
     const count = filteredUsers.length;
-    console.log(count);
     const userCrop = paginate(filteredUsers, currentPage, pageSize);
     const clearFilter = () => {
         setSelectedProf();
@@ -40,7 +41,6 @@ const Users = ({ users, ...rest }) => {
 
     return (
         <div className="d-flex">
-
             {professions && (
                 <div className="d-flex flex-column flex-shrink-0 p-3">
                     <GroupList
@@ -58,9 +58,11 @@ const Users = ({ users, ...rest }) => {
             )}
 
             <div className="d-flex flex-column">
+                <div id="preloader" className="visible">
+                    <h1 className="loader">Загрузка</h1>
+                </div>
                 <SearchStatus length={count}/>
                 {users.length > 0 && (
-
                     <table className="table">
                         <thead>
                             <tr>
