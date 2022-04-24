@@ -1,23 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Qualitie = ({ user }) => {
+const Quality = ({ color, name, _id }) => {
     return (
-        <>
-            {user.qualities.map((quality) => (
-                <span
-                    key={quality._id}
-                    className={`badge m-2 bg-${quality.color}`}
-                >
-                    {quality.name}
-                </span>
-            ))}
-        </>
+        <span className={"badge m-1 bg-" + color}>
+            {name}
+        </span>
     );
 };
-
-Qualitie.propTypes = {
-    user: PropTypes.object.isRequired
+Quality.propTypes = {
+    color: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    _id: PropTypes.string.isRequired
 };
 
-export default Qualitie;
+export default Quality;

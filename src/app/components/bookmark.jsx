@@ -3,20 +3,13 @@ import PropTypes from "prop-types";
 
 const BookMark = ({ status, ...rest }) => {
     return (
-        <>
-            <i
-                className={"bi bi-bookmark" + (status.bookmark ? "-fill" : "")}
-                onClick={() => rest.onClick(status._id)}
-            >
-                {" "}
-            </i>
-        </>
+        <button {...rest}>
+            <i className={"bi bi-bookmark" + (status ? "-heart-fill" : "")}></i>
+        </button>
     );
 };
 BookMark.propTypes = {
-    status: PropTypes.object.isRequired,
-    rest: PropTypes.object,
-    onClick: PropTypes.func.isRequired
+    status: PropTypes.bool
 };
 
 export default BookMark;
