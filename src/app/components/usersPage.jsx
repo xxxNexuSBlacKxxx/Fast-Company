@@ -22,7 +22,9 @@ const UsersPage = ({ userId }) => {
                     <div className="p-2 h3 d-flex justify-content-center text-warning rounded-pill bg-secondary bg-gradient bg-opacity-75">{`Профессия: ${userById.profession.name}`}</div>
                     {userById.qualities.map((itemElem) => {
                         return (
-                            <div key={itemElem._id} className="p-2 h3 d-flex justify-content-center text-danger rounded-pill bg-secondary bg-gradient bg-opacity-75">
+                            <div
+                                key={itemElem._id}
+                                className="p-2 h3 d-flex justify-content-center text-danger rounded-pill bg-secondary bg-gradient bg-opacity-75">
                                 {itemElem.name}
                             </div>
                         );
