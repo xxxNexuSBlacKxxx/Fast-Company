@@ -7,6 +7,7 @@ import GroupList from "./groupList";
 import SearchStatus from "./searchStatus";
 import UserTable from "./usersTable";
 import _ from "lodash";
+
 const UsersList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfession] = useState();
@@ -30,7 +31,18 @@ const UsersList = () => {
         });
         setUsers(newArray);
     };
-
+    const [searchPersons, setSearchPersons] = useState("");
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [selectedProf, searchPersons]);
+    const handleProfessionSelect = (item) => {
+        if (searchPersons !== "") setSearchPersons("");
+        setSelectedProf(item);
+    };
+    const handleChange = ({ target }) => {
+        setSelectedProf(undefined);
+        setSearchPersons(target.value);
+    };
     useEffect(() => {
         api.professions.fetchAll().then((data) => setProfession(data));
     }, []);
@@ -38,10 +50,6 @@ const UsersList = () => {
     useEffect(() => {
         setCurrentPage(1);
     }, [selectedProf]);
-
-    const handleProfessionSelect = (item) => {
-        setSelectedProf(item);
-    };
 
     const handlePageChange = (pageIndex) => {
         setCurrentPage(pageIndex);
@@ -51,14 +59,20 @@ const UsersList = () => {
     };
 
     if (users) {
-        const filteredUsers = selectedProf
+        const filteredUsers = searchPersons
             ? users.filter(
                 (user) =>
-                    JSON.stringify(user.profession) ===
-                    JSON.stringify(selectedProf)
+                    user.name
+                        .toLowerCase()
+                        .indexOf(searchPersons.toLowerCase()) !== -1
             )
-            : users;
-
+            : selectedProf
+                ? users.filter(
+                    (user) =>
+                        JSON.stringify(user.profession) ===
+                        JSON.stringify(selectedProf)
+                )
+                : users;
         const count = filteredUsers.length;
         const sortedUsers = _.orderBy(
             filteredUsers,
@@ -84,12 +98,24 @@ const UsersList = () => {
                             onClick={clearFilter}
                         >
                             {" "}
-                            Очиститть
+                            Очистить
                         </button>
                     </div>
                 )}
                 <div className="d-flex flex-column">
                     <SearchStatus length={count} />
+                    <div className="row mb-3">
+                        <div className="col-sm-12">
+                            <input
+                                type="text"
+                                className="form-control"
+                                name="searchPersons"
+                                placeholder="Search..."
+                                onChange={handleChange}
+                                value={searchPersons}
+                            />
+                        </div>
+                    </div>
                     {count > 0 && (
                         <UserTable
                             users={usersCrop}
