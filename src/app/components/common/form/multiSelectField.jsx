@@ -10,7 +10,6 @@ const MultiSelectField = ({ options, onChange, name, label }) => {
                 value: options[optionName]._id
             }))
             : options;
-
     const handleChange = (value) => {
         onChange({ name: name, value });
     };
