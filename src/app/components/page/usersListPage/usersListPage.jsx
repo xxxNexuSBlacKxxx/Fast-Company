@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { paginate } from "../utils/paginate";
-import Pagination from "./pagination";
-import api from "../api";
-import GroupList from "./groupList";
-import SearchStatus from "./searchStatus";
-import UserTable from "./usersTable";
+import { paginate } from "../../../utils/paginate";
+import Pagination from "../../common/pagination";
+import api from "../../../api";
+import GroupList from "../../common/groupList";
+import SearchStatus from "../../ui/searchStatus";
+import UserTable from "../../ui/usersTable";
 import _ from "lodash";
 
-const UsersList = () => {
+const UsersListPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfession] = useState();
+    const [searchQuery, setSearchQuery] = useState("");
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
     const pageSize = 8;
@@ -31,17 +32,16 @@ const UsersList = () => {
         });
         setUsers(newArray);
     };
-    const [searchPersons, setSearchPersons] = useState("");
     useEffect(() => {
         setCurrentPage(1);
-    }, [selectedProf, searchPersons]);
+    }, [selectedProf, searchQuery]);
     const handleProfessionSelect = (item) => {
-        if (searchPersons !== "") setSearchPersons("");
+        if (searchQuery !== "") setSearchQuery("");
         setSelectedProf(item);
     };
-    const handleChange = ({ target }) => {
+    const handleSearchQuery = ({ target }) => {
         setSelectedProf(undefined);
-        setSearchPersons(target.value);
+        setSearchQuery(target.value);
     };
     useEffect(() => {
         api.professions.fetchAll().then((data) => setProfession(data));
@@ -59,12 +59,12 @@ const UsersList = () => {
     };
 
     if (users) {
-        const filteredUsers = searchPersons
+        const filteredUsers = searchQuery
             ? users.filter(
                 (user) =>
                     user.name
                         .toLowerCase()
-                        .indexOf(searchPersons.toLowerCase()) !== -1
+                        .indexOf(searchQuery.toLowerCase()) !== -1
             )
             : selectedProf
                 ? users.filter(
@@ -111,8 +111,8 @@ const UsersList = () => {
                                 className="form-control"
                                 name="searchPersons"
                                 placeholder="Search..."
-                                onChange={handleChange}
-                                value={searchPersons}
+                                onChange={handleSearchQuery}
+                                value={searchQuery}
                             />
                         </div>
                     </div>
@@ -139,8 +139,8 @@ const UsersList = () => {
     }
     return "loading...";
 };
-UsersList.propTypes = {
+UsersListPage.propTypes = {
     users: PropTypes.array
 };
 
-export default UsersList;
+export default UsersListPage;
